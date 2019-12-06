@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class player : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class player : MonoBehaviour
     [Header("音效區域")]
     public AudioSource aud;
     public AudioClip soundDiamond;
+    [Header("鑽石區域")]
+    public int diamondCurrent;
+    public int diamondTotal;
+    public Text textDiamond;
 
     #endregion
 
@@ -42,6 +47,12 @@ public class player : MonoBehaviour
     {
 
     }
+
+    private void Start()
+    {
+        diamondTotal = GameObject.FindGameObjectsWithTag("鑽石").Length;
+        textDiamond.text = "鑽石: 0 / " + diamondTotal;
+    }
     private void Update()
     {
         Move();
@@ -54,4 +65,17 @@ public class player : MonoBehaviour
             isGround = true;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "鑽石")
+        {
+            aud.PlayOneShot(soundDiamond, 1.5f);
+            Destroy(collision.gameObject);
+            diamondCurrent++;
+            textDiamond.text = "鑽石: " + diamondCurrent + " / " + diamondTotal;
+        }
+    }
 }
+
+    
